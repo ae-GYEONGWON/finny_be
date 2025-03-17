@@ -1,0 +1,23 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.0  # Use the latest Ruff version
+    hooks:
+      - id: ruff
+        name: ruff-lint
+        description: "Ruff: Fast Python linter"
+        args: ["--fix"]
+        types: [python]
+        pass_filenames: true  # ⬅️ 추가 (스테이징된 파일만 검사)
+      - id: ruff-format
+        name: ruff-format
+        description: "Ruff: Format Python code (replaces Black)"
+        types: [python]
+        pass_filenames: true  # ⬅️ 추가 (스테이징된 파일만 검사)
+        

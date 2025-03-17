@@ -1,0 +1,56 @@
+[project]
+name = "finny-be"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "ae-GYEONGWON",email = "tjsxor50@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "fastapi (>=0.115.11,<0.116.0)",
+    "alembic (>=1.15.1,<2.0.0)",
+    "sqlalchemy (>=2.0.39,<3.0.0)",
+    "uvicorn[standard] (>=0.34.0,<0.35.0)",
+    "pydantic (>=2.10.6,<3.0.0)",
+    "yfinance (>=0.2.54,<0.3.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "numpy (>=2.2.4,<3.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.1.0"
+pytest = "^8.3.5"
+ruff = "^0.11.0"
+mypy = "^1.15.0"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = ["build", "dist", "_build", "buck-out"]
+
+ignore = [
+    "E203",  # `:` 앞 공백 관련 (black과 충돌 방지)
+    "E501",  # 너무 긴 줄 허용 (black이 자동 정리)
+]
+
+# 필요한 linter 추가
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]  # 기본적으로 flake8과 isort 포함
+ignore = ["E203", "E501"]
+
+# 자동 정렬 (isort 대체)
+[tool.ruff.format]
+quote-style = "double"  # 기본은 "double", single을 원하면 "single"
+indent-style = "space"
+line-ending = "auto"
+
