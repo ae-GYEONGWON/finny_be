@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api import api_router
 
-api = FastAPI()
+api = FastAPI(title="Virtual Trading System")
 
 
 origins = ["*"]
