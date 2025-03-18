@@ -1,14 +1,15 @@
-from typing import Generator
+from typing import AsyncGenerator
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy import create_async_engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import AsyncSession, DeclarativeBase, sessionmaker
 
 from src.core.config import get_setting
 
 settings = get_setting()
 
 
-SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://{}:{}@{}:{}/{}".format(
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
     settings.POSTGRES_USER,
     settings.POSTGRES_PASSWORD,
     settings.POSTGRES_HOST,
@@ -16,22 +17,20 @@ SQLALCHEMY_DATABASE_URL = "postgresql+psycopg2://{}:{}@{}:{}/{}".format(
     settings.POSTGRES_DB,
 )
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, echo=True)
-
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
 class Base(DeclarativeBase):
     pass
 
 
-def get_db() -> Generator[Session, None, None]:
-    db = SessionLocal()
-    try:
-        yield db
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
+async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+    async with factory() as session:
+        try:
+            yield session
+        except SQLAlchemyError as error:
+            await session.rollback()
+            raise error
+        finally:
+            await session.close()
