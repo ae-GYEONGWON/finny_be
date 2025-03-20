@@ -15,7 +15,7 @@ async def websocket_client():
     async with websockets.connect(url) as websocket:
         subscribe_message = {
             "action": "subscribe",
-            "params": {"symbols": "AAPL,RY,RY:TSX,EUR/USD,BTC/USD"},
+            "params": {"symbols": "BTC/USD,ETH/BTC"},
         }
         await websocket.send(json.dumps(subscribe_message))
 
