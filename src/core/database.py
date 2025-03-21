@@ -4,9 +4,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-from src.core.config import get_setting
+from src.core.config import get_settings
 
-settings = get_setting()
+settings = get_settings()
 
 
 SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(

@@ -1,6 +1,10 @@
 from functools import lru_cache
+from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+load_dotenv(Path(".env"), override=True)  # ✅ .env 강제 로딩
 
 
 class Settings(BaseSettings):
